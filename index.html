@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitime Başvuru</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #a0a0a0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 1s;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 2s, bounce 2s infinite 2s;
+            cursor: pointer;
+        }
+
+        .scroll-down svg {
+            width: 40px;
+            height: 40px;
+            fill: #fff;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Profesyonel geçiş efekti */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: radial-gradient(circle at center, #5a61ef 0%, #151515 70%);
+        }
+
+        .transition-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .transition-overlay::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .transition-overlay.active::before {
+            width: 300px;
+            height: 300px;
+            animation: pulseRing 1.5s ease-out infinite;
+        }
+
+        .transition-overlay::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(90, 97, 239, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .transition-overlay.active::after {
+            width: 200px;
+            height: 200px;
+            animation: pulseRing 1.5s ease-out infinite 0.3s;
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+
+        @keyframes slideInUp {
+            from { bottom: -100%; }
+            to { bottom: 0; }
+        }
+
+        @keyframes slideOutUp {
+            from { bottom: 0; }
+            to { bottom: 100%; }
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ana sayfa -->
+    <div class="page" id="firstPage">
+        <div class="container">
+            <h1>
+                <span class="gradient-text">Değerli Hocam</span>, <br>
+                Vereceğiniz Finansal Okuryazarlık & Borsada Risk - Para Yönetimi Eğitim Programı
+            </h1>
+            <p>
+                ile ilgili kendi motivasyon ve bilgilerimi sunmak istiyorum
+                çok zamanınızı almayacak söz :) (aşağıdakı butona tıklayarak devam edebilirsiniz)
+            </p>
+        </div>
+
+        <div class="scroll-down" id="nextButton">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 15.5l-4.5-4.5h9l-4.5 4.5z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Profesyonel geçiş overlay'i -->
+    <div class="transition-overlay" id="transition"></div>
+
+    <script>
+        const nextButton = document.getElementById('nextButton');
+        const transition = document.getElementById('transition');
+
+        nextButton.addEventListener('click', () => {
+            // Profesyonel geçiş animasyonunu başlat
+            transition.classList.add('active');
+            
+            // 1.2 saniye sonra ikinci sayfaya yönlendir
+            setTimeout(() => {
+                window.location.href = './page2.html';
+            }, 1200);
+        });
+    </script>
+</body>
+</html>
